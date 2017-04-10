@@ -6,4 +6,13 @@
     android:layout_height="match_parent"
     tools:context="com.example.caiogalvani.remotecontrolarduino.Splash_Activity">
 
+    <ImageView
+        android:id="@+id/imgViewSplash"
+        android:layout_width="576dp"
+        android:layout_height="495dp"
+        app:srcCompat="@drawable/arduinosplashscreen"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent" />
 </android.support.constraint.ConstraintLayout>
