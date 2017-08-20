@@ -1,8 +1,17 @@
 package com.example.caiogalvani.remotecontrolarduino.adapters.view_holders;
 
-/**
- * Created by caio.galvani on 20/08/2017.
- */
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.TextView;
 
-public class DevicesViewHolder {
+import com.example.caiogalvani.remotecontrolarduino.R;
+
+public class DevicesViewHolder extends RecyclerView.ViewHolder {
+    public TextView textViewNameDevice;
+
+    public DevicesViewHolder(View itemView) {
+        super(itemView);
+
+        textViewNameDevice = (TextView) itemView.findViewById(R.id.textViewNameDevice);
+    }
 }
