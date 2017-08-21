@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.caiogalvani.remotecontrolarduino">
 
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/iconcontrolarduino"
@@ -10,7 +13,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".Splash_Activity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">
@@ -20,6 +23,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".RemoteControlActivity"></activity>
     </application>
 
 </manifest>

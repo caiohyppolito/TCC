@@ -1,5 +1,6 @@
 package com.example.caiogalvani.remotecontrolarduino.adapters;
 
+import android.bluetooth.BluetoothDevice;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,11 +12,17 @@ import com.example.caiogalvani.remotecontrolarduino.adapters.view_holders.Device
 import java.util.List;
 
 public class DevicesAdapter extends RecyclerView.Adapter<DevicesViewHolder> {
-    private List<String> mListDevices;
+    public interface IDevicesAdapter{
+        void OnClickDeviceListener(BluetoothDevice device);
+    }
 
-    public DevicesAdapter(List<String> listDevices)
+    private List<BluetoothDevice> mListDevices;
+    private IDevicesAdapter mDevicesAdapter;
+
+    public DevicesAdapter(List<BluetoothDevice> listDevices, IDevicesAdapter devicesAdapter)
     {
         mListDevices = listDevices;
+        mDevicesAdapter = devicesAdapter;
     }
 
     @Override
@@ -24,14 +31,26 @@ public class DevicesAdapter extends RecyclerView.Adapter<DevicesViewHolder> {
 
         DevicesViewHolder devicesViewHolder = new DevicesViewHolder(view);
 
+        devicesViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mDevicesAdapter != null)
+                {
+                    BluetoothDevice device = (BluetoothDevice) view.getTag();
+
+                    mDevicesAdapter.OnClickDeviceListener(device);
+                }
+            }
+        });
+
         return devicesViewHolder;
     }
 
     @Override
     public void onBindViewHolder(DevicesViewHolder holder, int position) {
-        String itemDevice = mListDevices.get(position);
+        BluetoothDevice itemDevice = mListDevices.get(position);
 
-        holder.textViewNameDevice.setText(itemDevice);
+        holder.textViewNameDevice.setText(itemDevice.getName());
 
         holder.itemView.setTag(itemDevice);
     }
