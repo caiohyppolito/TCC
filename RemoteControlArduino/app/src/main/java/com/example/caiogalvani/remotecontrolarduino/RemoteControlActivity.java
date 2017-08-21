@@ -1,9 +1,11 @@
 package com.example.caiogalvani.remotecontrolarduino;
 
 import android.bluetooth.BluetoothDevice;
+import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.example.caiogalvani.remotecontrolarduino.bluetooth.ConnectionBluetoothThread;
@@ -13,11 +15,6 @@ import java.io.IOException;
 public class RemoteControlActivity extends AppCompatActivity implements View.OnClickListener {
 
     public static final String PUT_EXTRA_DEVICE = "put_extra_device";
-
-    private ImageButton mImageButtonTop;
-    private ImageButton mImageButtonLeft;
-    private ImageButton mImageButtonDown;
-    private ImageButton mImageButtonRight;
 
     private BluetoothDevice mBluetoothDevice;
 
@@ -32,6 +29,7 @@ public class RemoteControlActivity extends AppCompatActivity implements View.OnC
     }
 
     private void initialize() {
+
         mBluetoothDevice = getIntent().getParcelableExtra(PUT_EXTRA_DEVICE);
 
         if(mBluetoothDevice == null){
@@ -48,15 +46,19 @@ public class RemoteControlActivity extends AppCompatActivity implements View.OnC
             finish();
         }
 
-        mImageButtonTop = (ImageButton) findViewById(R.id.imageButtonTop);
-        mImageButtonDown = (ImageButton) findViewById(R.id.imageButtonDown);
-        mImageButtonLeft = (ImageButton) findViewById(R.id.imageButtonLeft);
-        mImageButtonRight = (ImageButton) findViewById(R.id.imageButtonRight);
+        ImageButton imageButtonTop = (ImageButton) findViewById(R.id.imageButtonTop);
+        ImageButton imageButtonDown = (ImageButton) findViewById(R.id.imageButtonDown);
+        ImageButton imageButtonLeft = (ImageButton) findViewById(R.id.imageButtonLeft);
+        ImageButton imageButtonRight = (ImageButton) findViewById(R.id.imageButtonRight);
 
-        mImageButtonTop.setOnClickListener(this);
-        mImageButtonDown.setOnClickListener(this);
-        mImageButtonLeft.setOnClickListener(this);
-        mImageButtonRight.setOnClickListener(this);
+        Button buttonStop = (Button) findViewById(R.id.buttonStop);
+
+        imageButtonTop.setOnClickListener(this);
+        imageButtonDown.setOnClickListener(this);
+        imageButtonLeft.setOnClickListener(this);
+        imageButtonRight.setOnClickListener(this);
+
+        buttonStop.setOnClickListener(this);
     }
 
     @Override
@@ -89,6 +91,14 @@ public class RemoteControlActivity extends AppCompatActivity implements View.OnC
             case R.id.imageButtonRight:
                 try {
                     mConnectionBluetoothThread.writeMessage("d");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                break;
+
+            case R.id.buttonStop:
+                try {
+                    mConnectionBluetoothThread.writeMessage("p");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

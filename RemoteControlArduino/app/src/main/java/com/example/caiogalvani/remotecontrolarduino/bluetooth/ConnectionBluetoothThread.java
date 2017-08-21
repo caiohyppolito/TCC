@@ -8,7 +8,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.UUID;
 
-public class ConnectionBluetoothThread extends Thread {
+public class ConnectionBluetoothThread extends Thread{
     private final static String UUID_CONNECTION = "00001101-0000-1000-8000-00805F9B34FB";
 
     private BluetoothDevice mBluetoothDevice;
@@ -24,27 +24,24 @@ public class ConnectionBluetoothThread extends Thread {
     public ConnectionBluetoothThread(BluetoothDevice device) throws IOException{
         mBluetoothDevice = device;
 
-        setupConnection();
+        this.start();
     }
 
     private void setDeviceConnection(BluetoothDevice device)throws IOException{
         mBluetoothDevice = device;
 
-        setupConnection();
+        this.start();
     }
 
     private void setupConnection() throws IOException{
             mBluetoothSocket = mBluetoothDevice.createRfcommSocketToServiceRecord(UUID.fromString(UUID_CONNECTION));
 
             if (mBluetoothSocket != null) {
+                mBluetoothSocket.connect();
+
                 mInputStream = mBluetoothSocket.getInputStream();
                 mOutputStream = mBluetoothSocket.getOutputStream();
             }
-    }
-
-    @Override
-    public void run() {
-
     }
 
     public void cancel() {
@@ -59,7 +56,17 @@ public class ConnectionBluetoothThread extends Thread {
 
     public void writeMessage(String message) throws IOException {
         if (message != null && mOutputStream != null && mBluetoothDevice != null) {
-            mOutputStream.write(message.getBytes());
+            byte[] bytes = message.getBytes();
+            mOutputStream.write(bytes);
+        }
+    }
+
+    @Override
+    public void run(){
+        try {
+            setupConnection();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
