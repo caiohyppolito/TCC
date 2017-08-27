@@ -1,9 +1,9 @@
 package com.example.caiogalvani.remotecontrolarduino;
 
 import android.bluetooth.BluetoothDevice;
-import android.content.pm.ActivityInfo;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -12,7 +12,7 @@ import com.example.caiogalvani.remotecontrolarduino.bluetooth.ConnectionBluetoot
 
 import java.io.IOException;
 
-public class RemoteControlActivity extends AppCompatActivity implements View.OnClickListener {
+public class RemoteControlActivity extends AppCompatActivity implements View.OnTouchListener, View.OnClickListener {
 
     public static final String PUT_EXTRA_DEVICE = "put_extra_device";
 
@@ -53,49 +53,52 @@ public class RemoteControlActivity extends AppCompatActivity implements View.OnC
 
         Button buttonStop = (Button) findViewById(R.id.buttonStop);
 
-        imageButtonTop.setOnClickListener(this);
-        imageButtonDown.setOnClickListener(this);
-        imageButtonLeft.setOnClickListener(this);
-        imageButtonRight.setOnClickListener(this);
+        imageButtonTop.setOnTouchListener(this);
+        imageButtonDown.setOnTouchListener(this);
+        imageButtonLeft.setOnTouchListener(this);
+        imageButtonRight.setOnTouchListener(this);
 
         buttonStop.setOnClickListener(this);
     }
 
     @Override
-    public void onClick(View view) {
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        String message = null;
+
         switch (view.getId()) {
             case R.id.imageButtonTop:
-                try {
-                    mConnectionBluetoothThread.writeMessage("f");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                message = "f";
                 break;
 
             case R.id.imageButtonDown:
-                try {
-                    mConnectionBluetoothThread.writeMessage("t");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                message = "t";
                 break;
 
             case R.id.imageButtonLeft:
-                try {
-                    mConnectionBluetoothThread.writeMessage("e");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                message = "e";
                 break;
 
             case R.id.imageButtonRight:
-                try {
-                    mConnectionBluetoothThread.writeMessage("d");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                message = "d";
                 break;
+        }
 
+        if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+            message = "p"; // TIROU O DEDO DO BOTÃO. PARAR O ROBO
+        }
+
+        try {
+            mConnectionBluetoothThread.writeMessage(message);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return true;
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
             case R.id.buttonStop:
                 try {
                     mConnectionBluetoothThread.writeMessage("p");
